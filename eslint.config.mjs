@@ -10,7 +10,7 @@ const ui5TestsConfig = {
     "no-unused-vars": [
       "error",
       {
-        argsIgnorePattern: "When|Then|Given",
+        argsIgnorePattern: "When|Given",
       },
     ],
   },
