@@ -23,7 +23,7 @@ class ProcessorService extends cds.ApplicationService {
       const incidents = Array.isArray(data) ? data : [data];
       incidents.forEach((incident) => {
         if (incident.title?.toLowerCase().includes("urgent")) {
-          incident.urgency = { code: "H", descr: "High" };
+          incident.urgency = {code: "H",descr: "High"};
         }
       });
     }
