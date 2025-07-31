@@ -14,7 +14,7 @@ entity Incidents    :   cuid,   managed    {
                             timestamp   :   type of managed:createdAt;
                             author      :   type of managed:createdBy;
                             message     :   String;
-                        };
+                        };           
 }
 
 /**
@@ -67,10 +67,14 @@ entity Urgency  :   CodeList {
         low = 'L';
     };
 }
- 
-entity IncidentChangeLogs   :   {
 
-};
+//Incidents Change log entity to log the changes on an incident
+entity IncidentsChangeLogs    :   cuid,   managed    {
+    incidentId  :  UUID;
+    oldValue    :   String;
+    newValue    :   String;
+    changeType  :   String;
+}
 
 type EMailAddress   :   String;
 type PhoneNumber    :   String;

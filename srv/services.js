@@ -12,7 +12,7 @@ class ProcessorService extends cds.ApplicationService {
 
     this.after("UPDATE" , "Incidents" , (req) => {
       this.onAfterUpdateIncidents(req);
-    })
+    });
 
     return super.init();
   }
@@ -30,13 +30,30 @@ class ProcessorService extends cds.ApplicationService {
   }
 
   async onBeforeUpdateIncident(req) {
-    const { status_code } = await SELECT.one(
-      req.subject,
-      (i) => i.status_code,
-      req.data.ID
-    );
+    console.log("onBeforeUpdateIncident")
+    console.log(req.data)
+    const { status_code } = await SELECT.from("Incidents",{ID:req.data.ID})
+    console.log('status code',status_code)
     if (status_code === "C") {
       return req.reject("Can not update the closed incident");
+    }
+  }
+
+  async onAfterUpdateIncidents(req) {
+    console.log("onAfterUpdateIncidents")
+    const  data  = req; 
+    try {
+        const { title } =await SELECT.from("Incidents",{ID:data.ID})
+        console.log(title)
+        await cds.tx(tx => tx.run(UPDATE("Incidents",{ID : data.ID})))
+        await cds.tx( tx => tx.run(INSERT.into("IncidentsChangeLogs").entries({
+          incidentId:data.ID,
+          oldValue:title,
+          newValue:data.titl,
+          changeType:'Update'})))
+        console.log('Update done successfully......',"info")
+    } catch (error) {
+      console.log("Update to change logs not done correctly",error)
     }
   }
 }

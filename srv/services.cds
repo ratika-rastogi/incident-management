@@ -9,6 +9,8 @@ service  ProcessorService {
 
     @readonly
     entity Customers as projection on my.Customers;
+
+    entity IncidentsChangeLogs as projection on my.IncidentsChangeLogs;
 }
 
 annotate ProcessorService.Incidents with @odata.draft.enabled; 
